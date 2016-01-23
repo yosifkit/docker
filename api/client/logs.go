@@ -2,7 +2,6 @@ package client
 
 import (
 	"fmt"
-	"io"
 
 	Cli "github.com/docker/docker/cli"
 	flag "github.com/docker/docker/pkg/mflag"
@@ -54,10 +53,6 @@ func (cli *DockerCli) CmdLogs(args ...string) error {
 	}
 	defer responseBody.Close()
 
-	if c.Config.Tty {
-		_, err = io.Copy(cli.out, responseBody)
-	} else {
-		_, err = stdcopy.StdCopy(cli.out, cli.err, responseBody)
-	}
+	_, err = stdcopy.StdCopy(cli.out, cli.err, responseBody)
 	return err
 }
